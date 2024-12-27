@@ -8,20 +8,9 @@
 import UIKit
 
 final class TasksCell: UITableViewCell  {
-    
     // MARK: - Properties
     private var date = Date()
-    private var taskDataStore: TaskDataStore?
-    
-    private lazy var taskStore: TaskStoreProtocol? = {
-        do {
-            try taskStore = TaskStore(taskDataStore, delegate: self, date: date)
-            
-            return taskStore
-        } catch {
-            return nil
-        }
-    }()
+    private var taskStore: TaskStoreProtocol?
     
     private let params = GeometricParams(
         topInset: 2,
@@ -32,71 +21,42 @@ final class TasksCell: UITableViewCell  {
     )
 
     // MARK: - UI Components
-    private lazy var tasksHStack: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        view.distribution = .fill
-        view.alignment = .bottom
-        view.spacing = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    @IBOutlet 
+    weak var timeLabel: UILabel!
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.register(TaskCell.self,
-                      forCellWithReuseIdentifier: TaskCell.reuseIdentifier)
-        view.allowsMultipleSelection = false
-        view.dataSource = self
-        view.delegate = self
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
+    @IBOutlet 
+    weak var collectionView: UICollectionView!
     
-    private lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .light)
-        label.textAlignment = .left
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    //MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override func awakeFromNib() {
+        super.awakeFromNib()
         
-        setupViews()
+        collectionView.allowsMultipleSelection = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(TaskCell.nib(), forCellWithReuseIdentifier: TaskCell.reuseIdentifier)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    static func nib() -> UINib {
+        return UINib(nibName: TasksCell.reuseIdentifier, bundle: nil)
     }
     
     // MARK: - Cell Config
     func configure(with taskDataStore: TaskDataStore, cellDate: Date) {
         timeLabel.text = DateFormatter.shortTimeFormatter.string(from: cellDate)
-        self.date = cellDate
-        self.taskDataStore = taskDataStore
+        date = cellDate
+        taskStore = setupTaskStore(taskDataStore: taskDataStore)
+        collectionView.reloadData()
     }
     
-    private func setupViews() {
-        contentView.addSubview(timeLabel)
-        contentView.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            timeLabel.widthAnchor.constraint(equalToConstant: 40),
-
-            collectionView.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalTo: contentView.heightAnchor)
-        ])
+    private func setupTaskStore(taskDataStore: TaskDataStore) -> TaskStore? {
+        do {
+            let taskStore = try TaskStore(taskDataStore,
+                                 delegate: self,
+                                 date: date)
+            return taskStore
+        } catch {
+            return nil
+        }
     }
 }
 
@@ -112,10 +72,8 @@ extension TasksCell: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: TaskCell.reuseIdentifier,
-                for: indexPath
-            ) as? TaskCell,
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseIdentifier,
+                                                          for: indexPath) as? TaskCell,
             let task = taskStore?.taskObject(at: indexPath)
         else {
             return UICollectionViewCell()
