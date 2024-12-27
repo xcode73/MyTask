@@ -32,7 +32,7 @@ class DescriptionCell: UITableViewCell {
         return view
     }()
 
-    //MARK: - Init
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -72,27 +72,12 @@ extension DescriptionCell: UITextViewDelegate {
         }
     }
     
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        delegate?.didTapDoneButton(title: textField.text ?? "")
-//        textField.resignFirstResponder()
-//        return true
-//    }
-    
     func textViewDidEndEditing(_ textView: UITextView) {
-        if descriptionTextField.text.isEmpty || descriptionTextField.text == "" {
+        if descriptionTextField.text.isEmpty {
             descriptionTextField.textColor = .lightGray
             descriptionTextField.text = "Description"
         }
         
         delegate?.descriptionChanged(text: descriptionTextField.text)
     }
-    
-//    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-//        
-//        delegate?.didTapDoneButton(title: textField.text ?? "")
-//    }
-    
-//    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-//        return true
-//    }
 }

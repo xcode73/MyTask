@@ -10,7 +10,7 @@ import UIKit
 final class TasksViewController: UIViewController {
     // MARK: - Properties
     private var hourlyDates: [Date] = []
-    private let taskDataStore  = (UIApplication.shared.delegate as! AppDelegate).taskDataStore
+    private var taskDataStore: TaskDataStore?
     
     // MARK: - UI Components
     @IBOutlet var tableView: UITableView!
@@ -41,11 +41,19 @@ final class TasksViewController: UIViewController {
         title = "Tasks"
         view.backgroundColor = .white
         hourlyDates = createHourlyDates(for: datePicker.date)
+        taskDataStore = appDelegate().taskDataStore
         
         setupNavigationBar()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
+    }
+    
+    private func appDelegate() -> AppDelegate {
+       guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+           fatalError("could not get app delegate ")
+       }
+       return delegate
     }
     
     private func createHourlyDates(for date: Date) -> [Date] {
@@ -64,9 +72,9 @@ final class TasksViewController: UIViewController {
     }
     
     private func presentTaskView(task: Task? = nil, date: Date? = nil) {
-        let vc = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
-        vc.delegate = self
-        let navigationController = UINavigationController( rootViewController: vc )
+        let viewController = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
+        viewController.delegate = self
+        let navigationController = UINavigationController( rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         
         present(navigationController, animated: true)
@@ -135,7 +143,6 @@ extension TasksViewController: UITableViewDataSource {
         return cell
     }
 }
-
 
 // MARK: - UITableViewDelegate
 extension TasksViewController: UITableViewDelegate {

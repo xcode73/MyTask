@@ -9,12 +9,10 @@ import Foundation
 
 extension Date {
     var truncated: Date? {
-        get {
-            let calendar = Calendar.current
-            var dateComponents = calendar.dateComponents([.year, .month, .day, .hour], from: self)
-            dateComponents.timeZone = calendar.timeZone
-            return calendar.date(from: dateComponents)
-        }
+        let calendar = Calendar.current
+        var dateComponents = calendar.dateComponents([.year, .month, .day, .hour], from: self)
+        dateComponents.timeZone = calendar.timeZone
+        return calendar.date(from: dateComponents)
     }
     
     var plusOneHour: Date? {

@@ -14,6 +14,7 @@
 		91844D2C2D1E9D0A0008C618 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91844D2B2D1E9D0A0008C618 /* Main.storyboard */; };
 		91844D3F2D1F0FD10008C618 /* TasksCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91844D3E2D1F0FD10008C618 /* TasksCell.xib */; };
 		91844D412D1F133B0008C618 /* TaskCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91844D402D1F133B0008C618 /* TaskCell.xib */; };
+		91844D442D1F541D0008C618 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 91844D432D1F541D0008C618 /* .swiftlint.yml */; };
 		91ACAE162D1C941E0012DEF9 /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ACAE122D1C941E0012DEF9 /* DateCell.swift */; };
 		91ACAE172D1C941E0012DEF9 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ACAE102D1C941E0012DEF9 /* TitleCell.swift */; };
 		91ACAE182D1C941E0012DEF9 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ACAE142D1C941E0012DEF9 /* TaskViewController.swift */; };
@@ -42,6 +43,7 @@
 		91844D2B2D1E9D0A0008C618 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		91844D3E2D1F0FD10008C618 /* TasksCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TasksCell.xib; sourceTree = "<group>"; };
 		91844D402D1F133B0008C618 /* TaskCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskCell.xib; sourceTree = "<group>"; };
+		91844D432D1F541D0008C618 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		91ACAE102D1C941E0012DEF9 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		91ACAE112D1C941E0012DEF9 /* DescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCell.swift; sourceTree = "<group>"; };
 		91ACAE122D1C941E0012DEF9 /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		91BCDF222D1C4B6400D3B5E5 = {
 			isa = PBXGroup;
 			children = (
+				91844D432D1F541D0008C618 /* .swiftlint.yml */,
 				91BCDF2D2D1C4B6400D3B5E5 /* MyTask */,
 				91BCDF2C2D1C4B6400D3B5E5 /* Products */,
 				56CB532FFE8B3435F281FFB7 /* Pods */,
@@ -250,6 +253,7 @@
 				91BCDF282D1C4B6400D3B5E5 /* Frameworks */,
 				91BCDF292D1C4B6400D3B5E5 /* Resources */,
 				35795BF63A18D8DBFE2AF3A6 /* [CP] Embed Pods Frameworks */,
+				91844D462D1F56990008C618 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -298,6 +302,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91844D442D1F541D0008C618 /* .swiftlint.yml in Resources */,
 				91844D3F2D1F0FD10008C618 /* TasksCell.xib in Resources */,
 				91844D412D1F133B0008C618 /* TaskCell.xib in Resources */,
 				91844D2C2D1E9D0A0008C618 /* Main.storyboard in Resources */,
@@ -347,6 +352,25 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		91844D462D1F56990008C618 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

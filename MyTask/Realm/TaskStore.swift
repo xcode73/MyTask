@@ -21,10 +21,10 @@ protocol TaskStoreDelegate: AnyObject {
 }
 
 enum TaskStoreUpdate: Hashable {
-    case inserted(at: IndexPath)
+    case inserted(indexPath: IndexPath)
     case deleted(from: IndexPath)
-    case updated(at: IndexPath)
-    case moved(from: IndexPath, to: IndexPath)
+    case updated(indexPath: IndexPath)
+    case moved(from: IndexPath, toIndexPath: IndexPath)
 }
 
 final class TaskStore {
@@ -72,8 +72,8 @@ final class TaskStore {
                 self.inProgressChanges.removeAll()
             case .update(_, let deletions, let insertions, let modifications):
                 self.inProgressChanges.append(contentsOf: deletions.map { TaskStoreUpdate.deleted(from: IndexPath(row: $0, section: 0)) })
-                self.inProgressChanges.append(contentsOf: insertions.map { TaskStoreUpdate.inserted(at: IndexPath(row: $0, section: 0)) })
-                self.inProgressChanges.append(contentsOf: modifications.map { TaskStoreUpdate.updated(at: IndexPath(row: $0, section: 0)) })
+                self.inProgressChanges.append(contentsOf: insertions.map { TaskStoreUpdate.inserted(indexPath: IndexPath(row: $0, section: 0)) })
+                self.inProgressChanges.append(contentsOf: modifications.map { TaskStoreUpdate.updated(indexPath: IndexPath(row: $0, section: 0)) })
                 
                 self.delegate?.didUpdate(self.inProgressChanges)
                 self.inProgressChanges.removeAll()

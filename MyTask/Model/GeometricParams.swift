@@ -13,18 +13,4 @@ struct GeometricParams {
     let leftInset: CGFloat
     let rightInset: CGFloat
     let cellSpacing: CGFloat
-    
-    init(
-        topInset: CGFloat,
-        bottomInset: CGFloat,
-        leftInset: CGFloat,
-        rightInset: CGFloat,
-        cellSpacing: CGFloat
-    ) {
-        self.topInset = topInset
-        self.bottomInset = bottomInset
-        self.leftInset = leftInset
-        self.rightInset = rightInset
-        self.cellSpacing = cellSpacing
-    }
 }

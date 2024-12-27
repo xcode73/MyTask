@@ -9,10 +9,10 @@ import Foundation
 
 extension DateFormatter {
     static let shortTimeFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .none
-        df.timeStyle = .short
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
         
-        return df
+        return dateFormatter
     }()
 }

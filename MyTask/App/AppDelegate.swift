@@ -9,7 +9,7 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window : UIWindow?
+    var window: UIWindow?
     
     lazy var taskDataStore: TaskDataStore = {
         do {

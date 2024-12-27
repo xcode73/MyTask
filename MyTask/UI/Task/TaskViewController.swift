@@ -57,7 +57,6 @@ final class TaskViewController: UIViewController {
         return view
     }()
     
-    
     private lazy var deleteButton: UIButton = {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 18, weight: .regular)
@@ -213,7 +212,7 @@ final class TaskViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }
@@ -236,8 +235,7 @@ extension TaskViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView,
-                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
             let cell = TitleCell()

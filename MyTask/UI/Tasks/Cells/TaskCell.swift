@@ -20,11 +20,6 @@ final class TaskCell: UICollectionViewCell {
     @IBOutlet 
     weak var taskTimeLabel: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-    }
-    
     func configure(with task: Task, color: UIColor) {
         taskTitleLabel.text = task.name
         taskHStack.backgroundColor = color.withAlphaComponent(0.3)

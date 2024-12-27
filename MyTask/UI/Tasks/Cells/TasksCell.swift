@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TasksCell: UITableViewCell  {
+final class TasksCell: UITableViewCell {
     // MARK: - Properties
     private var date = Date()
     private var taskStore: TaskStoreProtocol?
@@ -41,14 +41,14 @@ final class TasksCell: UITableViewCell  {
     }
     
     // MARK: - Cell Config
-    func configure(with taskDataStore: TaskDataStore, cellDate: Date) {
+    func configure(with taskDataStore: TaskDataStore?, cellDate: Date) {
         timeLabel.text = DateFormatter.shortTimeFormatter.string(from: cellDate)
         date = cellDate
         taskStore = setupTaskStore(taskDataStore: taskDataStore)
         collectionView.reloadData()
     }
     
-    private func setupTaskStore(taskDataStore: TaskDataStore) -> TaskStore? {
+    private func setupTaskStore(taskDataStore: TaskDataStore?) -> TaskStore? {
         do {
             let taskStore = try TaskStore(taskDataStore,
                                  delegate: self,
@@ -134,16 +134,16 @@ extension TasksCell: TaskStoreDelegate {
                 switch update {
                 case let .deleted(from: indexPath):
                     collectionView.deleteItems(at: [indexPath])
-                case let .inserted(at: indexPath):
+                case let .inserted(indexPath: indexPath):
                     collectionView.insertItems(at: [indexPath])
-                case let .updated(at: indexPath):
+                case let .updated(indexPath: indexPath):
                     collectionView.reloadItems(at: [indexPath])
-                case let .moved(from: source, to: target):
+                case let .moved(from: source, toIndexPath: target):
                     collectionView.moveItem(at: source, to: target)
                     movedToIndexPaths.append(target)
                 }
             }
-        }, completion: { done in
+        }, completion: { _ in
             self.collectionView.reloadItems(at: movedToIndexPaths)
         })
     }
