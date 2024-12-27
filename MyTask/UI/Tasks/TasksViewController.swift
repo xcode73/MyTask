@@ -9,8 +9,8 @@ import UIKit
 
 final class TasksViewController: UIViewController {
     // MARK: - Properties
-    private var taskStore: TaskStoreProtocol?
     private var hourlyDates: [Date] = []
+    private let taskDataStore  = (UIApplication.shared.delegate as! AppDelegate).taskDataStore
     
     // MARK: - UI Components
     private lazy var tableView: UITableView = {
@@ -34,6 +34,16 @@ final class TasksViewController: UIViewController {
         return view
     }()
     
+    private lazy var addButton: UIBarButtonItem = {
+        let view = UIBarButtonItem()
+        view.image = UIImage(named: "ic.plus")
+        view.tintColor = .systemGray
+        view.target = self
+        view.action = #selector(didTapAddButton)
+        
+        return view
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +55,30 @@ final class TasksViewController: UIViewController {
         setupConstraints()
         
         hourlyDates = createHourlyDates(for: datePicker.date)
-        taskStore = TaskStore()
+    }
+    
+    private func createHourlyDates(for date: Date) -> [Date] {
+        var hourlyDates: [Date] = []
+        let calendar = Calendar.current
+        
+        let startOfDay = calendar.startOfDay(for: date)
+
+        for hour in 0..<24 {
+            if let hourlyDate = calendar.date(byAdding: .hour, value: hour, to: startOfDay) {
+                hourlyDates.append(hourlyDate)
+            }
+        }
+        
+        return hourlyDates
+    }
+    
+    private func presentTaskView(task: Task? = nil, date: Date? = nil) {
+        let vc = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
+        vc.delegate = self
+        let navigationController = UINavigationController( rootViewController: vc )
+        navigationController.modalPresentationStyle = .pageSheet
+        
+        present(navigationController, animated: true)
     }
     
     // MARK: - UI Setup
@@ -68,32 +101,9 @@ final class TasksViewController: UIViewController {
         } else {
             UINavigationBar.appearance().barTintColor = .white
         }
-
+        
+        navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-    }
-    
-    private func createHourlyDates(for date: Date) -> [Date] {
-        var hourlyDates: [Date] = []
-        let calendar = Calendar.current
-        
-        let startOfDay = calendar.startOfDay(for: date)
-
-        for hour in 0..<24 {
-            if let hourlyDate = calendar.date(byAdding: .hour, value: hour, to: startOfDay) {
-                hourlyDates.append(hourlyDate)
-            }
-        }
-        
-        return hourlyDates
-    }
-    
-    // MARK: - Actions
-    
-    @objc
-    private func didSelectDate(_ sender: UIDatePicker) {
-        hourlyDates = createHourlyDates(for: sender.date)
-        tableView.reloadData()
-        self.dismiss(animated: true)
     }
     
     // MARK: - Constraints
@@ -106,6 +116,19 @@ final class TasksViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    // MARK: - Actions
+    @objc
+    private func didSelectDate(_ sender: UIDatePicker) {
+        hourlyDates = createHourlyDates(for: sender.date)
+        tableView.reloadData()
+        self.dismiss(animated: true)
+    }
+    
+    @objc
+    private func didTapAddButton() {
+        presentTaskView(date: datePicker.date.truncated)
     }
 }
 
@@ -126,9 +149,8 @@ extension TasksViewController: UITableViewDataSource {
         }
         
         let cellDate = hourlyDates[indexPath.row]
-        let tasks = taskStore?.getTasks(for: cellDate)
         
-        cell.configure(with: tasks, cellDate: cellDate)
+        cell.configure(with: taskDataStore, cellDate: cellDate)
         cell.selectionStyle = .none
 
         return cell
@@ -145,5 +167,23 @@ extension TasksViewController: UITableViewDelegate {
             return 38
         }
         return 60
+    }
+    
+    // long press row
+    
+}
+
+// MARK: - TaskDelegate
+extension TasksViewController: TaskViewControllerDelegate {
+    func doneButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    func deleteButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    func cancelButtonTapped() {
+        dismiss(animated: true)
     }
 }

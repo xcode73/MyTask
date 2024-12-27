@@ -7,9 +7,21 @@
 
 import UIKit
 
-final class TasksCell: UITableViewCell {
+final class TasksCell: UITableViewCell  {
+    
     // MARK: - Properties
-    private var tasks: [Task]?
+    private var date = Date()
+    private var taskDataStore: TaskDataStore?
+    
+    private lazy var taskStore: TaskStoreProtocol? = {
+        do {
+            try taskStore = TaskStore(taskDataStore, delegate: self, date: date)
+            
+            return taskStore
+        } catch {
+            return nil
+        }
+    }()
     
     private let params = GeometricParams(
         topInset: 2,
@@ -66,11 +78,10 @@ final class TasksCell: UITableViewCell {
     }
     
     // MARK: - Cell Config
-    func configure(with tasks: [Task]?, cellDate: Date) {
+    func configure(with taskDataStore: TaskDataStore, cellDate: Date) {
         timeLabel.text = DateFormatter.shortTimeFormatter.string(from: cellDate)
-        
-        self.tasks = tasks
-        collectionView.reloadData()
+        self.date = cellDate
+        self.taskDataStore = taskDataStore
     }
     
     private func setupViews() {
@@ -94,7 +105,7 @@ extension TasksCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         
-        return tasks?.count ?? 0
+        return taskStore?.numberOfItemsInSection() ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -105,7 +116,7 @@ extension TasksCell: UICollectionViewDataSource {
                 withReuseIdentifier: TaskCell.reuseIdentifier,
                 for: indexPath
             ) as? TaskCell,
-            let task = tasks?[indexPath.row]
+            let task = taskStore?.taskObject(at: indexPath)
         else {
             return UICollectionViewCell()
         }
@@ -122,7 +133,7 @@ extension TasksCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let cellCount = tasks?.count ?? 0
+        let cellCount = taskStore?.numberOfItemsInSection() ?? 0
         let paddingWidth = params.leftInset + params.rightInset + CGFloat(cellCount - 1) * params.cellSpacing
         let availableSpace = collectionView.frame.width - paddingWidth
         let cellWidth = availableSpace / CGFloat(cellCount)
@@ -152,5 +163,30 @@ extension TasksCell: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
 
         return params.cellSpacing
+    }
+}
+
+// MARK: - TaskStoreDelegate
+extension TasksCell: TaskStoreDelegate {
+    func didUpdate(_ updates: [TaskStoreUpdate]) {
+        var movedToIndexPaths = [IndexPath]()
+        
+        collectionView.performBatchUpdates({
+            for update in updates {
+                switch update {
+                case let .deleted(from: indexPath):
+                    collectionView.deleteItems(at: [indexPath])
+                case let .inserted(at: indexPath):
+                    collectionView.insertItems(at: [indexPath])
+                case let .updated(at: indexPath):
+                    collectionView.reloadItems(at: [indexPath])
+                case let .moved(from: source, to: target):
+                    collectionView.moveItem(at: source, to: target)
+                    movedToIndexPaths.append(target)
+                }
+            }
+        }, completion: { done in
+            self.collectionView.reloadItems(at: movedToIndexPaths)
+        })
     }
 }
