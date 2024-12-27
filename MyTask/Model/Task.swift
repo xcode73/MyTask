@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Task: Codable, Equatable, Identifiable {
-    let id: UUID
+struct Task: Equatable, Identifiable {
+    let id: Int
     let name: String
     let dateStart: Date
     let dateFinish: Date
