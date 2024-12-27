@@ -13,17 +13,7 @@ final class TasksViewController: UIViewController {
     private let taskDataStore  = (UIApplication.shared.delegate as! AppDelegate).taskDataStore
     
     // MARK: - UI Components
-    private lazy var tableView: UITableView = {
-        let view = UITableView()
-        view.separatorStyle = .singleLine
-        view.separatorInset = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 3)
-        view.register(TasksCell.self, forCellReuseIdentifier: TasksCell.reuseIdentifier)
-        view.delegate = self
-        view.dataSource = self
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
+    @IBOutlet var tableView: UITableView!
     
     private lazy var datePicker: UIDatePicker = {
         let view = UIDatePicker()
@@ -50,11 +40,12 @@ final class TasksViewController: UIViewController {
         
         title = "Tasks"
         view.backgroundColor = .white
+        hourlyDates = createHourlyDates(for: datePicker.date)
         
         setupNavigationBar()
-        setupConstraints()
-        
-        hourlyDates = createHourlyDates(for: datePicker.date)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
     }
     
     private func createHourlyDates(for date: Date) -> [Date] {
@@ -63,7 +54,7 @@ final class TasksViewController: UIViewController {
         
         let startOfDay = calendar.startOfDay(for: date)
 
-        for hour in 0..<24 {
+        for hour in 0..<25 {
             if let hourlyDate = calendar.date(byAdding: .hour, value: hour, to: startOfDay) {
                 hourlyDates.append(hourlyDate)
             }
@@ -104,18 +95,6 @@ final class TasksViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-    }
-    
-    // MARK: - Constraints
-    private func setupConstraints() {
-        view.addSubview(tableView)
-        
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
     }
     
     // MARK: - Actions
@@ -164,13 +143,10 @@ extension TasksViewController: UITableViewDelegate {
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.row == 0 {
-            return 38
+            return 20
         }
-        return 60
+        return 50
     }
-    
-    // long press row
-    
 }
 
 // MARK: - TaskDelegate
