@@ -6,14 +6,13 @@
 //
 
 import RealmSwift
-import Foundation
 
 protocol TaskStoreProtocol {
     func numberOfItemsInSection() -> Int?
     func taskObject(at indexPath: IndexPath) -> Task?
     func add(task: Task) throws
     func update(task: Task) throws
-    func delete(at indexPath: IndexPath) throws
+    func delete(task: Task) throws
 }
 
 protocol TaskStoreDelegate: AnyObject {
@@ -48,7 +47,7 @@ final class TaskStore {
     }()
     
     init(
-        _ dataStore: TaskDataStore?,
+        _ dataStore: TaskDataStore,
         delegate: TaskStoreDelegate? = nil,
         date: Date? = nil
     ) throws {
@@ -112,14 +111,10 @@ extension TaskStore: TaskStoreProtocol {
     }
     
     func update(task: Task) throws {
-        if let storedTask = results?.first(where: { $0.id == task.id }) {
-            try? dataStore?.update(storedTask, task: task)
-        }
+        try? dataStore?.update(task: task)
     }
     
-    func delete(at indexPath: IndexPath) throws {
-        guard let storedTask = results?[indexPath.row] else { return }
-        
-        try? dataStore?.delete(storedTask)
+    func delete(task: Task) throws {
+        try? dataStore?.delete(objectId: task.id)
     }
 }

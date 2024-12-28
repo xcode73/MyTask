@@ -8,16 +8,14 @@
 import UIKit
 
 protocol TaskViewControllerDelegate: AnyObject {
-    func cancelButtonTapped()
-    func doneButtonTapped()
-    func deleteButtonTapped()
+    func dismissTaskViewController()
 }
 
 final class TaskViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: TaskViewControllerDelegate?
     
-    private var taskDataStore: TaskDataStore?
+    private var taskDataStore: TaskDataStore
     
     private lazy var taskStore: TaskStoreProtocol? = {
         do {
@@ -52,7 +50,7 @@ final class TaskViewController: UIViewController {
         view.tintColor = .systemGray
         view.isEnabled = false
         view.target = self
-        view.action = #selector(didTapAddTaskButton)
+        view.action = #selector(doneButtonTapped)
         
         return view
     }()
@@ -87,7 +85,7 @@ final class TaskViewController: UIViewController {
     
     // MARK: - Init
     init(
-        taskDataStore: TaskDataStore?,
+        taskDataStore: TaskDataStore,
         task: Task? = nil,
         date: Date? = nil
     ) {
@@ -139,7 +137,7 @@ final class TaskViewController: UIViewController {
     
     // MARK: - Actions
     @objc
-    private func didTapAddTaskButton() {
+    private func doneButtonTapped() {
         guard let selectedName,
               let selectedStartDate,
               let selectedEndDate
@@ -158,7 +156,8 @@ final class TaskViewController: UIViewController {
                                        dateStart: selectedStartDate,
                                        dateFinish: selectedEndDate,
                                        description: selectedDescription)
-                try? taskStore?.add(task: updatedTask)
+                
+                try? taskStore?.update(task: updatedTask)
             }
         } else {
             let newTask = Task(id: UUID().hashValue,
@@ -170,17 +169,20 @@ final class TaskViewController: UIViewController {
             try? taskStore?.add(task: newTask)
         }
         
-        delegate?.doneButtonTapped()
+        delegate?.dismissTaskViewController()
     }
 
     @objc
     private func didTapCancelButton() {
-        delegate?.cancelButtonTapped()
+        delegate?.dismissTaskViewController()
     }
     
     @objc
     private func didTapDeleteTaskButton() {
-        delegate?.deleteButtonTapped()
+        guard let task else { return }
+        
+        try? taskStore?.delete(task: task)
+        delegate?.dismissTaskViewController()
     }
     
     @objc

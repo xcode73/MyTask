@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol TasksCellDelegate: AnyObject {
+    func didTapTask(task: Task)
+}
+
 final class TasksCell: UITableViewCell {
     // MARK: - Properties
+    weak var delegate: TasksCellDelegate?
     private var date = Date()
+    private var taskDataStore: TaskDataStore?
     private var taskStore: TaskStoreProtocol?
     
     private let params = GeometricParams(
@@ -41,15 +47,23 @@ final class TasksCell: UITableViewCell {
     }
     
     // MARK: - Cell Config
-    func configure(with taskDataStore: TaskDataStore?, cellDate: Date) {
+    func configure(with taskDataStore: TaskDataStore, cellDate: Date) {
         timeLabel.text = DateFormatter.shortTimeFormatter.string(from: cellDate)
         date = cellDate
+        self.taskDataStore = taskDataStore
         taskStore = setupTaskStore(taskDataStore: taskDataStore)
+        
+        if taskStore?.numberOfItemsInSection() == 0 {
+            collectionView.isHidden = true
+        }
+        collectionView.isHidden = false
         collectionView.reloadData()
     }
     
     private func setupTaskStore(taskDataStore: TaskDataStore?) -> TaskStore? {
         do {
+            guard let taskDataStore else { return nil }
+            
             let taskStore = try TaskStore(taskDataStore,
                                  delegate: self,
                                  date: date)
@@ -121,6 +135,13 @@ extension TasksCell: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
 
         return params.cellSpacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let task = taskStore?.taskObject(at: indexPath) else { return }
+        
+        delegate?.didTapTask(task: task)
     }
 }
 

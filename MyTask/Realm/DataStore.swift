@@ -10,8 +10,8 @@ import RealmSwift
 protocol TaskDataStore {
     func objects(for date: Date) -> Results<TaskRealm>?
     func add(_ object: TaskRealm) throws
-    func update(_ object: TaskRealm, task: Task) throws
-    func delete(_ object: TaskRealm) throws
+    func update(task: Task) throws
+    func delete(objectId: Int) throws
 }
 
 final class DataStore {
@@ -31,7 +31,6 @@ final class DataStore {
             throw StoreError.failedToLoadRealm(error)
         }
     }
-    
 }
 
 // MARK: - TrackerDataStore
@@ -52,7 +51,8 @@ extension DataStore: TaskDataStore {
         }
     }
     
-    func update(_ object: TaskRealm, task: Task) throws {
+    func update(task: Task) throws {
+        guard let object = realm.object(ofType: TaskRealm.self, forPrimaryKey: task.id) else { return }
         realm.beginWrite()
         
         object.name = task.name
@@ -67,9 +67,11 @@ extension DataStore: TaskDataStore {
         }
     }
     
-    func delete(_ object: TaskRealm) throws {
+    func delete(objectId: Int) throws {
+        guard let task = realm.object(ofType: TaskRealm.self, forPrimaryKey: objectId) else { return }
+        
         realm.beginWrite()
-        realm.delete(object)
+        realm.delete(task)
         
         do {
             try realm.commitWrite()

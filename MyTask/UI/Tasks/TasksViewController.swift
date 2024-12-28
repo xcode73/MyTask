@@ -71,13 +71,12 @@ final class TasksViewController: UIViewController {
         return hourlyDates
     }
     
-    private func presentTaskView(task: Task? = nil, date: Date? = nil) {
+    private func presentTaskViewController(task: Task? = nil, date: Date? = nil) {
+        guard let taskDataStore, let navigationController else { return }
+        
         let viewController = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
         viewController.delegate = self
-        let navigationController = UINavigationController( rootViewController: viewController)
-        navigationController.modalPresentationStyle = .pageSheet
-        
-        present(navigationController, animated: true)
+        navigationController.pushViewController(viewController, animated: true)
     }
     
     // MARK: - UI Setup
@@ -115,7 +114,7 @@ final class TasksViewController: UIViewController {
     
     @objc
     private func didTapAddButton() {
-        presentTaskView(date: datePicker.date.truncated)
+        presentTaskViewController(date: datePicker.date.truncated)
     }
 }
 
@@ -130,13 +129,14 @@ extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: TasksCell.reuseIdentifier, for: indexPath) as? TasksCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: TasksCell.reuseIdentifier, for: indexPath) as? TasksCell,
+            let taskDataStore
         else {
             return UITableViewCell()
         }
         
         let cellDate = hourlyDates[indexPath.row]
-        
+        cell.delegate = self
         cell.configure(with: taskDataStore, cellDate: cellDate)
         cell.selectionStyle = .none
 
@@ -146,6 +146,13 @@ extension TasksViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension TasksViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
+        print("didSelectRowAt")
+        let cellDate = hourlyDates[indexPath.row].minusOneHour
+        presentTaskViewController(date: cellDate)
+    }
+    
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -158,15 +165,14 @@ extension TasksViewController: UITableViewDelegate {
 
 // MARK: - TaskDelegate
 extension TasksViewController: TaskViewControllerDelegate {
-    func doneButtonTapped() {
-        dismiss(animated: true)
+    func dismissTaskViewController() {
+        self.navigationController?.popViewController(animated: true)
     }
-    
-    func deleteButtonTapped() {
-        dismiss(animated: true)
-    }
-    
-    func cancelButtonTapped() {
-        dismiss(animated: true)
+}
+
+// MARK: - TasksCellDelegate
+extension TasksViewController: TasksCellDelegate {
+    func didTapTask(task: Task) {
+        presentTaskViewController(task: task)
     }
 }
