@@ -7,9 +7,15 @@
 
 import UIKit
 
-final class TasksCell: UITableViewCell  {
+protocol TasksCellDelegate: AnyObject {
+    func didTapTask(task: Task)
+}
+
+final class TasksCell: UITableViewCell {
     // MARK: - Properties
+    weak var delegate: TasksCellDelegate?
     private var date = Date()
+    private var taskDataStore: TaskDataStore?
     private var taskStore: TaskStoreProtocol?
     
     private let params = GeometricParams(
@@ -44,12 +50,20 @@ final class TasksCell: UITableViewCell  {
     func configure(with taskDataStore: TaskDataStore, cellDate: Date) {
         timeLabel.text = DateFormatter.shortTimeFormatter.string(from: cellDate)
         date = cellDate
+        self.taskDataStore = taskDataStore
         taskStore = setupTaskStore(taskDataStore: taskDataStore)
+        
+        if taskStore?.numberOfItemsInSection() == 0 {
+            collectionView.isHidden = true
+        }
+        collectionView.isHidden = false
         collectionView.reloadData()
     }
     
-    private func setupTaskStore(taskDataStore: TaskDataStore) -> TaskStore? {
+    private func setupTaskStore(taskDataStore: TaskDataStore?) -> TaskStore? {
         do {
+            guard let taskDataStore else { return nil }
+            
             let taskStore = try TaskStore(taskDataStore,
                                  delegate: self,
                                  date: date)
@@ -122,6 +136,13 @@ extension TasksCell: UICollectionViewDelegateFlowLayout {
 
         return params.cellSpacing
     }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let task = taskStore?.taskObject(at: indexPath) else { return }
+        
+        delegate?.didTapTask(task: task)
+    }
 }
 
 // MARK: - TaskStoreDelegate
@@ -134,16 +155,16 @@ extension TasksCell: TaskStoreDelegate {
                 switch update {
                 case let .deleted(from: indexPath):
                     collectionView.deleteItems(at: [indexPath])
-                case let .inserted(at: indexPath):
+                case let .inserted(indexPath: indexPath):
                     collectionView.insertItems(at: [indexPath])
-                case let .updated(at: indexPath):
+                case let .updated(indexPath: indexPath):
                     collectionView.reloadItems(at: [indexPath])
-                case let .moved(from: source, to: target):
+                case let .moved(from: source, toIndexPath: target):
                     collectionView.moveItem(at: source, to: target)
                     movedToIndexPaths.append(target)
                 }
             }
-        }, completion: { done in
+        }, completion: { _ in
             self.collectionView.reloadItems(at: movedToIndexPaths)
         })
     }

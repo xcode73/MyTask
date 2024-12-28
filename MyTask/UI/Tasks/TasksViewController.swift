@@ -10,7 +10,7 @@ import UIKit
 final class TasksViewController: UIViewController {
     // MARK: - Properties
     private var hourlyDates: [Date] = []
-    private let taskDataStore  = (UIApplication.shared.delegate as! AppDelegate).taskDataStore
+    private var taskDataStore: TaskDataStore?
     
     // MARK: - UI Components
     @IBOutlet var tableView: UITableView!
@@ -41,11 +41,19 @@ final class TasksViewController: UIViewController {
         title = "Tasks"
         view.backgroundColor = .white
         hourlyDates = createHourlyDates(for: datePicker.date)
+        taskDataStore = appDelegate().taskDataStore
         
         setupNavigationBar()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
+    }
+    
+    private func appDelegate() -> AppDelegate {
+       guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+           fatalError("could not get app delegate ")
+       }
+       return delegate
     }
     
     private func createHourlyDates(for date: Date) -> [Date] {
@@ -63,13 +71,12 @@ final class TasksViewController: UIViewController {
         return hourlyDates
     }
     
-    private func presentTaskView(task: Task? = nil, date: Date? = nil) {
-        let vc = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
-        vc.delegate = self
-        let navigationController = UINavigationController( rootViewController: vc )
-        navigationController.modalPresentationStyle = .pageSheet
+    private func presentTaskViewController(task: Task? = nil, date: Date? = nil) {
+        guard let taskDataStore, let navigationController else { return }
         
-        present(navigationController, animated: true)
+        let viewController = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
+        viewController.delegate = self
+        navigationController.pushViewController(viewController, animated: true)
     }
     
     // MARK: - UI Setup
@@ -107,7 +114,7 @@ final class TasksViewController: UIViewController {
     
     @objc
     private func didTapAddButton() {
-        presentTaskView(date: datePicker.date.truncated)
+        presentTaskViewController(date: datePicker.date.truncated)
     }
 }
 
@@ -122,13 +129,14 @@ extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: TasksCell.reuseIdentifier, for: indexPath) as? TasksCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: TasksCell.reuseIdentifier, for: indexPath) as? TasksCell,
+            let taskDataStore
         else {
             return UITableViewCell()
         }
         
         let cellDate = hourlyDates[indexPath.row]
-        
+        cell.delegate = self
         cell.configure(with: taskDataStore, cellDate: cellDate)
         cell.selectionStyle = .none
 
@@ -136,9 +144,15 @@ extension TasksViewController: UITableViewDataSource {
     }
 }
 
-
 // MARK: - UITableViewDelegate
 extension TasksViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
+        print("didSelectRowAt")
+        let cellDate = hourlyDates[indexPath.row].minusOneHour
+        presentTaskViewController(date: cellDate)
+    }
+    
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -151,15 +165,14 @@ extension TasksViewController: UITableViewDelegate {
 
 // MARK: - TaskDelegate
 extension TasksViewController: TaskViewControllerDelegate {
-    func doneButtonTapped() {
-        dismiss(animated: true)
+    func dismissTaskViewController() {
+        self.navigationController?.popViewController(animated: true)
     }
-    
-    func deleteButtonTapped() {
-        dismiss(animated: true)
-    }
-    
-    func cancelButtonTapped() {
-        dismiss(animated: true)
+}
+
+// MARK: - TasksCellDelegate
+extension TasksViewController: TasksCellDelegate {
+    func didTapTask(task: Task) {
+        presentTaskViewController(task: task)
     }
 }

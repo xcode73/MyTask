@@ -29,7 +29,7 @@ class TitleCell: UITableViewCell {
         return view
     }()
 
-    //MARK: - Init
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

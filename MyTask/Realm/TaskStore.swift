@@ -6,14 +6,13 @@
 //
 
 import RealmSwift
-import Foundation
 
 protocol TaskStoreProtocol {
     func numberOfItemsInSection() -> Int?
     func taskObject(at indexPath: IndexPath) -> Task?
     func add(task: Task) throws
     func update(task: Task) throws
-    func delete(at indexPath: IndexPath) throws
+    func delete(task: Task) throws
 }
 
 protocol TaskStoreDelegate: AnyObject {
@@ -21,10 +20,10 @@ protocol TaskStoreDelegate: AnyObject {
 }
 
 enum TaskStoreUpdate: Hashable {
-    case inserted(at: IndexPath)
+    case inserted(indexPath: IndexPath)
     case deleted(from: IndexPath)
-    case updated(at: IndexPath)
-    case moved(from: IndexPath, to: IndexPath)
+    case updated(indexPath: IndexPath)
+    case moved(from: IndexPath, toIndexPath: IndexPath)
 }
 
 final class TaskStore {
@@ -48,7 +47,7 @@ final class TaskStore {
     }()
     
     init(
-        _ dataStore: TaskDataStore?,
+        _ dataStore: TaskDataStore,
         delegate: TaskStoreDelegate? = nil,
         date: Date? = nil
     ) throws {
@@ -72,8 +71,8 @@ final class TaskStore {
                 self.inProgressChanges.removeAll()
             case .update(_, let deletions, let insertions, let modifications):
                 self.inProgressChanges.append(contentsOf: deletions.map { TaskStoreUpdate.deleted(from: IndexPath(row: $0, section: 0)) })
-                self.inProgressChanges.append(contentsOf: insertions.map { TaskStoreUpdate.inserted(at: IndexPath(row: $0, section: 0)) })
-                self.inProgressChanges.append(contentsOf: modifications.map { TaskStoreUpdate.updated(at: IndexPath(row: $0, section: 0)) })
+                self.inProgressChanges.append(contentsOf: insertions.map { TaskStoreUpdate.inserted(indexPath: IndexPath(row: $0, section: 0)) })
+                self.inProgressChanges.append(contentsOf: modifications.map { TaskStoreUpdate.updated(indexPath: IndexPath(row: $0, section: 0)) })
                 
                 self.delegate?.didUpdate(self.inProgressChanges)
                 self.inProgressChanges.removeAll()
@@ -112,14 +111,10 @@ extension TaskStore: TaskStoreProtocol {
     }
     
     func update(task: Task) throws {
-        if let storedTask = results?.first(where: { $0.id == task.id }) {
-            try? dataStore?.update(storedTask, task: task)
-        }
+        try? dataStore?.update(task: task)
     }
     
-    func delete(at indexPath: IndexPath) throws {
-        guard let storedTask = results?[indexPath.row] else { return }
-        
-        try? dataStore?.delete(storedTask)
+    func delete(task: Task) throws {
+        try? dataStore?.delete(objectId: task.id)
     }
 }

@@ -1398,6 +1398,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		4F88C6C3ACE35FA3F2CA778014FD390B /* Create Symlinks to Header Folders */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
