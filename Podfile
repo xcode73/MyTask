@@ -2,11 +2,13 @@
   platform :ios, '12.0'
 
 target 'MyTask' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for MyTask
   pod 'RealmSwift', '~>10'
   pod 'SwiftLint'
+end
+
+target "MyTaskTests" do
+  inherit! :search_paths
 
 end
