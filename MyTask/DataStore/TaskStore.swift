@@ -38,7 +38,7 @@ final class TaskStore {
         case failedToOpenRealmFile
     }
     
-    private lazy var results: Results<TaskRealm>? = {
+    private lazy var fetchedResults: Results<TaskRealm>? = {
         guard let date, let dataStore else { return nil }
         
         let objects = dataStore.objects(for: date)
@@ -50,7 +50,7 @@ final class TaskStore {
         _ dataStore: TaskDataStore,
         delegate: TaskStoreDelegate? = nil,
         date: Date? = nil
-    ) throws {
+    ) {
         self.dataStore = dataStore
         self.delegate = delegate
         self.date = date
@@ -63,7 +63,7 @@ final class TaskStore {
     }
     
     private func setupNotificationToken() {
-        self.notificationToken = results?.observe { [weak self] (changes: RealmCollectionChange) in
+        self.notificationToken = fetchedResults?.observe { [weak self] (changes: RealmCollectionChange) in
             guard let self else { return }
             
             switch changes {
@@ -86,11 +86,11 @@ final class TaskStore {
 // MARK: - TaskStoreProtocol
 extension TaskStore: TaskStoreProtocol {
     func numberOfItemsInSection() -> Int? {
-        return results?.count
+        return fetchedResults?.count
     }
     
     func taskObject(at indexPath: IndexPath) -> Task? {
-        guard let storedTask = results?[indexPath.row] else { return nil }
+        guard let storedTask = fetchedResults?[indexPath.row] else { return nil }
         
         return Task(id: storedTask.id,
                     name: storedTask.name,

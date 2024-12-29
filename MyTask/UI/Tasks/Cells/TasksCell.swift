@@ -53,24 +53,19 @@ final class TasksCell: UITableViewCell {
         self.taskDataStore = taskDataStore
         taskStore = setupTaskStore(taskDataStore: taskDataStore)
         
-        if taskStore?.numberOfItemsInSection() == 0 {
-            collectionView.isHidden = true
-        }
-        collectionView.isHidden = false
+        let tasksCount = taskStore?.numberOfItemsInSection() ?? 0
+        
+        collectionView.isHidden = tasksCount == 0
+        
         collectionView.reloadData()
     }
     
     private func setupTaskStore(taskDataStore: TaskDataStore?) -> TaskStore? {
-        do {
-            guard let taskDataStore else { return nil }
-            
-            let taskStore = try TaskStore(taskDataStore,
-                                 delegate: self,
-                                 date: date)
-            return taskStore
-        } catch {
-            return nil
-        }
+        guard let taskDataStore else { return nil }
+        
+        let taskStore = TaskStore(taskDataStore, delegate: self, date: date)
+        
+        return taskStore
     }
 }
 

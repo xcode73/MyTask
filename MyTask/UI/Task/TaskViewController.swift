@@ -18,13 +18,8 @@ final class TaskViewController: UIViewController {
     private var taskDataStore: TaskDataStore
     
     private lazy var taskStore: TaskStoreProtocol? = {
-        do {
-            try taskStore = TaskStore(taskDataStore)
-            
-            return taskStore
-        } catch {
-            return nil
-        }
+        
+        return TaskStore(taskDataStore)
     }()
     
     private var task: Task?

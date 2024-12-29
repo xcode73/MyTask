@@ -130,12 +130,12 @@ extension TasksViewController: UITableViewDataSource {
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: TasksCell.reuseIdentifier, for: indexPath) as? TasksCell,
+            let cellDate = hourlyDates[safe: indexPath.row],
             let taskDataStore
         else {
             return UITableViewCell()
         }
         
-        let cellDate = hourlyDates[indexPath.row]
         cell.delegate = self
         cell.configure(with: taskDataStore, cellDate: cellDate)
         cell.selectionStyle = .none
@@ -148,8 +148,9 @@ extension TasksViewController: UITableViewDataSource {
 extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        print("didSelectRowAt")
-        let cellDate = hourlyDates[indexPath.row].minusOneHour
+        guard let date = hourlyDates[safe: indexPath.row] else { return }
+        
+        let cellDate = date.minusOneHour
         presentTaskViewController(date: cellDate)
     }
     
