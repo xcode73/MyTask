@@ -53,10 +53,7 @@ final class TasksCell: UITableViewCell {
         self.taskDataStore = taskDataStore
         taskStore = setupTaskStore(taskDataStore: taskDataStore)
         
-        let tasksCount = taskStore?.numberOfItemsInSection() ?? 0
-        
-        collectionView.isHidden = tasksCount == 0
-        
+        hideCollectionViewIfNeeded()
         collectionView.reloadData()
     }
     
@@ -66,6 +63,11 @@ final class TasksCell: UITableViewCell {
         let taskStore = TaskStore(taskDataStore, delegate: self, date: date)
         
         return taskStore
+    }
+    
+    private func hideCollectionViewIfNeeded() {
+        let tasksCount = taskStore?.numberOfItemsInSection() ?? 0
+        collectionView.isHidden = tasksCount == 0
     }
 }
 
@@ -150,10 +152,13 @@ extension TasksCell: TaskStoreDelegate {
                 switch update {
                 case let .deleted(from: indexPath):
                     collectionView.deleteItems(at: [indexPath])
+                    hideCollectionViewIfNeeded()
                 case let .inserted(indexPath: indexPath):
                     collectionView.insertItems(at: [indexPath])
+                    hideCollectionViewIfNeeded()
                 case let .updated(indexPath: indexPath):
                     collectionView.reloadItems(at: [indexPath])
+                    hideCollectionViewIfNeeded()
                 case let .moved(from: source, toIndexPath: target):
                     collectionView.moveItem(at: source, to: target)
                     movedToIndexPaths.append(target)
