@@ -90,7 +90,7 @@ final class TasksViewController: UIViewController, TasksViewControllerProtocol {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = presenter
-        tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
+        presenter?.registerCells(for: tableView)
     }
     
     // MARK: - Actions

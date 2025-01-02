@@ -11,6 +11,7 @@ protocol TasksViewPresenterProtocol: NSObject, UITableViewDataSource {
     var view: TasksViewControllerProtocol? { get set }
     var taskDataStore: TaskDataStore? { get }
     func viewDidLoad(date: Date)
+    func registerCells(for tableView: UITableView)
     func createHourlyDates(for date: Date)
     func dateForRow(at indexPath: IndexPath) -> Date?
     
@@ -31,6 +32,10 @@ final class TasksViewPresenter: NSObject, TasksViewPresenterProtocol {
     func viewDidLoad(date: Date) {
         createHourlyDates(for: date)
         taskDataStore = appDelegate().taskDataStore
+    }
+    
+    func registerCells(for tableView: UITableView) {
+        tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
     }
     
     func createHourlyDates(for date: Date) {
