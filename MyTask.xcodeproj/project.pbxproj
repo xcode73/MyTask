@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		33826D6954903CFAC3A51947 /* Pods_MyTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB6D4255F493D53AEA3AC8B /* Pods_MyTask.framework */; };
+		91034CB72D27132400F8B3EF /* TasksViewPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91034CB62D27132400F8B3EF /* TasksViewPresenterTests.swift */; };
 		91844D262D1E9A070008C618 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91844D252D1E9A070008C618 /* DataStore.swift */; };
 		91844D282D1E9A1B0008C618 /* NullStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91844D272D1E9A1B0008C618 /* NullStore.swift */; };
 		91844D2A2D1E9A690008C618 /* Date+Truncated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91844D292D1E9A690008C618 /* Date+Truncated.swift */; };
@@ -34,6 +35,7 @@
 		91BCDF5E2D1C4E4B00D3B5E5 /* UITableViewCell+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCDF5D2D1C4E4B00D3B5E5 /* UITableViewCell+Identifier.swift */; };
 		91BCDF602D1C4E6400D3B5E5 /* UICollectionViewCell+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCDF5F2D1C4E6400D3B5E5 /* UICollectionViewCell+Identifier.swift */; };
 		91BCDF622D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCDF612D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift */; };
+		91BDC69D2D26C685007DF15A /* TasksViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BDC69C2D26C685007DF15A /* TasksViewPresenter.swift */; };
 		AD93490AE57F1FDCAE25CA39 /* libPods-MyTaskTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF0CBBB00B89577EE40FA51 /* libPods-MyTaskTests.a */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,7 @@
 		113AC556BDF90638FD122231 /* Pods-MyTask.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTask.debug.xcconfig"; path = "Target Support Files/Pods-MyTask/Pods-MyTask.debug.xcconfig"; sourceTree = "<group>"; };
 		1AF0CBBB00B89577EE40FA51 /* libPods-MyTaskTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyTaskTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		581830D2F4977D9C82F4C118 /* Pods-MyTask.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTask.release.xcconfig"; path = "Target Support Files/Pods-MyTask/Pods-MyTask.release.xcconfig"; sourceTree = "<group>"; };
+		91034CB62D27132400F8B3EF /* TasksViewPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewPresenterTests.swift; sourceTree = "<group>"; };
 		91844D252D1E9A070008C618 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		91844D272D1E9A1B0008C618 /* NullStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NullStore.swift; sourceTree = "<group>"; };
 		91844D292D1E9A690008C618 /* Date+Truncated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Truncated.swift"; sourceTree = "<group>"; };
@@ -80,6 +83,7 @@
 		91BCDF5D2D1C4E4B00D3B5E5 /* UITableViewCell+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Identifier.swift"; sourceTree = "<group>"; };
 		91BCDF5F2D1C4E6400D3B5E5 /* UICollectionViewCell+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Identifier.swift"; sourceTree = "<group>"; };
 		91BCDF612D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		91BDC69C2D26C685007DF15A /* TasksViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewPresenter.swift; sourceTree = "<group>"; };
 		A2543E9A8A057ED5F6A637BB /* Pods-MyTaskTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTaskTests.debug.xcconfig"; path = "Target Support Files/Pods-MyTaskTests/Pods-MyTaskTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ACB6D4255F493D53AEA3AC8B /* Pods_MyTask.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTask.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F5018E859DF1E9157690DF /* Pods-MyTaskTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTaskTests.release.xcconfig"; path = "Target Support Files/Pods-MyTaskTests/Pods-MyTaskTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				91844D582D2026BE0008C618 /* ArrayTests.swift */,
+				91034CB62D27132400F8B3EF /* TasksViewPresenterTests.swift */,
 			);
 			path = MyTaskTests;
 			sourceTree = "<group>";
@@ -235,6 +240,7 @@
 			children = (
 				91BCDF4E2D1C4CBD00D3B5E5 /* Cells */,
 				91BCDF552D1C4D8300D3B5E5 /* TasksViewController.swift */,
+				91BDC69C2D26C685007DF15A /* TasksViewPresenter.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -344,7 +350,7 @@
 				};
 			};
 			buildConfigurationList = 91BCDF262D1C4B6400D3B5E5 /* Build configuration list for PBXProject "MyTask" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -473,6 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91034CB72D27132400F8B3EF /* TasksViewPresenterTests.swift in Sources */,
 				91844D592D2026BE0008C618 /* ArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,6 +500,7 @@
 				91BCDF622D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift in Sources */,
 				91BCDF562D1C4D8300D3B5E5 /* TasksViewController.swift in Sources */,
 				91BCDF592D1C4DFD00D3B5E5 /* TaskStore.swift in Sources */,
+				91BDC69D2D26C685007DF15A /* TasksViewPresenter.swift in Sources */,
 				91BCDF542D1C4D5E00D3B5E5 /* TasksCell.swift in Sources */,
 				91BCDF442D1C4BFD00D3B5E5 /* AppDelegate.swift in Sources */,
 				91BCDF4B2D1C4C8000D3B5E5 /* GeometricParams.swift in Sources */,
@@ -709,7 +717,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -744,7 +752,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -1384,7 +1384,7 @@
 				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1706,6 +1706,7 @@
 				DEVELOPMENT_TEAM = UZVJKNB3WY;
 				IBSC_MODULE = Realm;
 				INFOPLIST_FILE = "Target Support Files/Realm/ResourceBundle-realm_objc_privacy-Realm-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_NAME = realm_objc_privacy;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1842,7 +1843,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Target Support Files/Pods-MyTask/Pods-MyTask-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1877,6 +1878,7 @@
 				DEVELOPMENT_TEAM = UZVJKNB3WY;
 				IBSC_MODULE = RealmSwift;
 				INFOPLIST_FILE = "Target Support Files/RealmSwift/ResourceBundle-realm_swift_privacy-RealmSwift-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_NAME = realm_swift_privacy;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1895,6 +1897,7 @@
 				DEVELOPMENT_TEAM = UZVJKNB3WY;
 				IBSC_MODULE = Realm;
 				INFOPLIST_FILE = "Target Support Files/Realm/ResourceBundle-realm_objc_privacy-Realm-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_NAME = realm_objc_privacy;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1913,6 +1916,7 @@
 				DEVELOPMENT_TEAM = UZVJKNB3WY;
 				IBSC_MODULE = RealmSwift;
 				INFOPLIST_FILE = "Target Support Files/RealmSwift/ResourceBundle-realm_swift_privacy-RealmSwift-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_NAME = realm_swift_privacy;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2129,7 +2133,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Target Support Files/Pods-MyTask/Pods-MyTask-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

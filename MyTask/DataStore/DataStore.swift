@@ -26,14 +26,7 @@ final class DataStore {
     
     init() throws {
         do {
-            let fileUrl = URL(fileURLWithPath: #file)
-            let projectSubUrl = fileUrl.deletingLastPathComponent()
-            let projectUrl = projectSubUrl.deletingLastPathComponent()
-            let realmURL = projectUrl.appendingPathComponent("MyTask.realm")
-
-            var config = Realm.Configuration.defaultConfiguration
-            config.fileURL = realmURL
-            realm = try Realm.init(configuration: config)
+            realm = try Realm()
         } catch {
             throw StoreError.failedToLoadRealm(error)
         }
