@@ -7,10 +7,13 @@
 
 import UIKit
 
-final class TasksViewController: UIViewController {
-    // MARK: - Properties
-    private var hourlyDates: [Date] = []
-    private var taskDataStore: TaskDataStore?
+protocol TasksViewControllerProtocol: AnyObject {
+    var presenter: TasksViewPresenterProtocol? { get set }
+    func presentTaskViewController(task: Task?, date: Date?)
+}
+
+final class TasksViewController: UIViewController, TasksViewControllerProtocol {
+    var presenter: TasksViewPresenterProtocol?
     
     // MARK: - UI Components
     @IBOutlet var tableView: UITableView!
@@ -38,48 +41,28 @@ final class TasksViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Tasks"
-        view.backgroundColor = .white
-        hourlyDates = createHourlyDates(for: datePicker.date)
-        taskDataStore = appDelegate().taskDataStore
-        
+        setupView()
         setupNavigationBar()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
-    }
-    
-    private func appDelegate() -> AppDelegate {
-       guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
-           fatalError("could not get app delegate ")
-       }
-       return delegate
-    }
-    
-    private func createHourlyDates(for date: Date) -> [Date] {
-        var hourlyDates: [Date] = []
-        let calendar = Calendar.current
+        setupTableView()
         
-        let startOfDay = calendar.startOfDay(for: date)
-
-        for hour in 0..<25 {
-            if let hourlyDate = calendar.date(byAdding: .hour, value: hour, to: startOfDay) {
-                hourlyDates.append(hourlyDate)
-            }
-        }
-        
-        return hourlyDates
+        presenter?.viewDidLoad(date: datePicker.date)
     }
     
-    private func presentTaskViewController(task: Task? = nil, date: Date? = nil) {
-        guard let taskDataStore, let navigationController else { return }
+    func presentTaskViewController(task: Task? = nil, date: Date? = nil) {
+        guard let taskDataStore = presenter?.taskDataStore, let navigationController else { return }
         
         let viewController = TaskViewController(taskDataStore: taskDataStore, task: task, date: date)
         viewController.delegate = self
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    // MARK: - UI Setup
+    // MARK: - Setup UI
+    private func setupView() {
+        presenter = TasksViewPresenter(view: self)
+        title = "Tasks"
+        view.backgroundColor = .white
+    }
+    
     private func setupNavigationBar() {
         if #available(iOS 13.0, *) {
             if let navBar = self.navigationController?.navigationBar {
@@ -104,10 +87,16 @@ final class TasksViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
     }
     
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = presenter
+        tableView.register(TasksCell.nib(), forCellReuseIdentifier: TasksCell.reuseIdentifier)
+    }
+    
     // MARK: - Actions
     @objc
     private func didSelectDate(_ sender: UIDatePicker) {
-        hourlyDates = createHourlyDates(for: sender.date)
+        presenter?.createHourlyDates(for: sender.date)
         tableView.reloadData()
         self.dismiss(animated: true)
     }
@@ -118,39 +107,18 @@ final class TasksViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource
-extension TasksViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-        hourlyDates.count
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: TasksCell.reuseIdentifier, for: indexPath) as? TasksCell,
-            let cellDate = hourlyDates[safe: indexPath.row],
-            let taskDataStore
-        else {
-            return UITableViewCell()
-        }
-        
-        cell.delegate = self
-        cell.configure(with: taskDataStore, cellDate: cellDate)
-        cell.selectionStyle = .none
-
-        return cell
-    }
-}
-
 // MARK: - UITableViewDelegate
 extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        guard let date = hourlyDates[safe: indexPath.row] else { return }
         
-        let cellDate = date.minusOneHour
+        guard 
+            let cellDate = presenter?.dateForRow(at: indexPath),
+            indexPath.row != 0
+        else {
+            return
+        }
+        
         presentTaskViewController(date: cellDate)
     }
     
@@ -168,12 +136,5 @@ extension TasksViewController: UITableViewDelegate {
 extension TasksViewController: TaskViewControllerDelegate {
     func dismissTaskViewController() {
         self.navigationController?.popViewController(animated: true)
-    }
-}
-
-// MARK: - TasksCellDelegate
-extension TasksViewController: TasksCellDelegate {
-    func didTapTask(task: Task) {
-        presentTaskViewController(task: task)
     }
 }

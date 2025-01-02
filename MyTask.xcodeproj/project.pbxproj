@@ -34,6 +34,7 @@
 		91BCDF5E2D1C4E4B00D3B5E5 /* UITableViewCell+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCDF5D2D1C4E4B00D3B5E5 /* UITableViewCell+Identifier.swift */; };
 		91BCDF602D1C4E6400D3B5E5 /* UICollectionViewCell+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCDF5F2D1C4E6400D3B5E5 /* UICollectionViewCell+Identifier.swift */; };
 		91BCDF622D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCDF612D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift */; };
+		91BDC69D2D26C685007DF15A /* TasksViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BDC69C2D26C685007DF15A /* TasksViewPresenter.swift */; };
 		AD93490AE57F1FDCAE25CA39 /* libPods-MyTaskTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF0CBBB00B89577EE40FA51 /* libPods-MyTaskTests.a */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		91BCDF5D2D1C4E4B00D3B5E5 /* UITableViewCell+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Identifier.swift"; sourceTree = "<group>"; };
 		91BCDF5F2D1C4E6400D3B5E5 /* UICollectionViewCell+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Identifier.swift"; sourceTree = "<group>"; };
 		91BCDF612D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		91BDC69C2D26C685007DF15A /* TasksViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewPresenter.swift; sourceTree = "<group>"; };
 		A2543E9A8A057ED5F6A637BB /* Pods-MyTaskTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTaskTests.debug.xcconfig"; path = "Target Support Files/Pods-MyTaskTests/Pods-MyTaskTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ACB6D4255F493D53AEA3AC8B /* Pods_MyTask.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTask.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F5018E859DF1E9157690DF /* Pods-MyTaskTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTaskTests.release.xcconfig"; path = "Target Support Files/Pods-MyTaskTests/Pods-MyTaskTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 			children = (
 				91BCDF4E2D1C4CBD00D3B5E5 /* Cells */,
 				91BCDF552D1C4D8300D3B5E5 /* TasksViewController.swift */,
+				91BDC69C2D26C685007DF15A /* TasksViewPresenter.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				91BCDF622D1C4E7B00D3B5E5 /* DateFormatter+Extensions.swift in Sources */,
 				91BCDF562D1C4D8300D3B5E5 /* TasksViewController.swift in Sources */,
 				91BCDF592D1C4DFD00D3B5E5 /* TaskStore.swift in Sources */,
+				91BDC69D2D26C685007DF15A /* TasksViewPresenter.swift in Sources */,
 				91BCDF542D1C4D5E00D3B5E5 /* TasksCell.swift in Sources */,
 				91BCDF442D1C4BFD00D3B5E5 /* AppDelegate.swift in Sources */,
 				91BCDF4B2D1C4C8000D3B5E5 /* GeometricParams.swift in Sources */,
